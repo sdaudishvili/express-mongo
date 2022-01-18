@@ -1,12 +1,11 @@
 const express = require('express');
 const jwt = require('jsonwebtoken');
-const Project = require('../models/Project');
-const User = require('../models/User');
-const authorized = require('../middlewares/auth');
+const Project = require('@/models/Project');
+const authorized = require('@/middlewares/auth');
+const User = require('@/models/User');
+const generateJWT = require('@/utils/generateJWT');
 
 const router = express.Router();
-
-const secretKey = 'testkey';
 
 router.get('/projects', async (req, res) => {
   const projects = await Project.find();
@@ -114,43 +113,32 @@ router.post('/register', async (req, res) => {
       password
     });
 
-    const token = jwt.sign({ user_id: user._id, username }, secretKey, {
-      expiresIn: '2h'
-    });
+    const token = generateJWT(user);
     return res.status(201).json({ token });
   } catch (err) {
-    console.log(err);
     return res.status(400).send('Error');
   }
 });
 
 router.post('/login', async (req, res) => {
-  // Our login logic starts here
   try {
-    // Get user input
     const { username, password } = req.body;
 
-    // Validate user input
     if (!(username && password)) {
       res.status(400).send('All input is required');
     }
-    // Validate if user exist in our database
     const user = await User.findOne({ username });
 
     const isValidPassword = await user.isValidPassword(password);
 
     if (isValidPassword) {
-      const token = jwt.sign({ user_id: user._id, username }, secretKey, {
-        expiresIn: '2h'
-      });
-
+      const token = generateJWT(user);
       return res.status(200).json(token);
     }
     return res.status(400).send('Invalid Credentials');
   } catch (err) {
     return res.status(400).send();
   }
-  // Our register logic ends here
 });
 
 router.get('/welcome', authorized, (req, res) => {

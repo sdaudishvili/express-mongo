@@ -1,6 +1,5 @@
 const jwt = require('jsonwebtoken');
-
-const secretKey = 'testkey';
+const jwtSettings = require('@/config/jwtSettings');
 
 const authorized = (req, res, next) => {
   const token = req.headers.authorization;
@@ -9,7 +8,7 @@ const authorized = (req, res, next) => {
     return res.status(401).send('Unauthorized');
   }
   try {
-    const decoded = jwt.verify(token, secretKey);
+    const decoded = jwt.verify(token, jwtSettings.secretKey);
     req.user = decoded;
   } catch (err) {
     return res.status(401).send('Unauthorized');
