@@ -7,7 +7,7 @@ const CardTextField = (props) => {
   const { className, title, label, ...rest } = props;
 
   return (
-    <Card className={clsx(className)}>
+    <Card className={clsx(className)} variant="outlined">
       <CardHeader title={label || title} />
       <CardContent>
         <TextField fullWidth variant="outlined" {...rest} label={label || title} />

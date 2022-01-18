@@ -19,6 +19,5 @@ export { default as Dropzone } from './Dropzone';
 export { default as BaseRoutesProvider } from './BaseRoutesProvider';
 export { default as Editor } from './Editor';
 export { default as DropDown } from './DropDown';
-export { default as MultiTextField } from './MultiTextField';
 
 export * from './CardComponents';

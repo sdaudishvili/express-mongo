@@ -1,17 +1,18 @@
+/* eslint-disable react/jsx-key */
 import React from 'react';
-import { CardTextField, ElemsRenderer, MultiTextField, Page, PageHead } from '@/components';
+import { CardRenderer, ElemsRenderer, Page, PageHead } from '@/components';
 import { generateErrorMsg } from '@/utils/messages/generateErrorMsg';
 import { create } from '@/api/dataProvider';
 import { useSnackbar } from 'notistack';
-import { Button } from '@material-ui/core';
+import { Button, Grid, TextField } from '@material-ui/core';
 import { makeStyles } from '@material-ui/styles';
 import { Link as RouterLink } from 'react-router-dom';
 import { messages } from '@/utils/messages';
 import { propertyKeyToLabel } from '@/utils/base';
+import { UrlInputs } from './components';
 
 const useStyles = makeStyles((theme) => ({
   root: {
-    width: theme.breakpoints.values.lg,
     maxWidth: '100%',
     margin: '0 auto',
     padding: theme.spacing(3, 3, 6, 3)
@@ -63,38 +64,43 @@ const CreateProject = () => {
     setValues({ ...values, [field]: value });
   };
 
-  const generateTextFieldProps = (key, { label = '' } = {}) => ({
+  const generateTextFieldProps = (key, { label = '', rows = 1 } = {}) => ({
     fullWidth: true,
     label: label || propertyKeyToLabel(key),
     name: key,
     value: values[key] || values[key] === 0 ? values[key] : '',
     variant: 'outlined',
-    onChange: ({ target: { value } }) => handleValueUpdate({ field: key, value })
+    onChange: ({ target: { value } }) => handleValueUpdate({ field: key, value }),
+    rows,
+    multiline: rows > 1,
+    key
   });
 
-  const generateMultiTextFieldProps = (key) => ({
+  const generateUrlInputsFields = (key) => ({
     title: propertyKeyToLabel(key),
     values: values[key] || values[key] === 0 ? values[key] : [],
-    onChange: (value) => handleValueUpdate({ field: key, value })
+    onChange: (value) => handleValueUpdate({ field: key, value }),
+    key
   });
 
-  const elems = [
-    <CardTextField {...generateTextFieldProps('title')} />,
-    <MultiTextField {...generateMultiTextFieldProps('frontTestUrls')} />,
-    <MultiTextField {...generateMultiTextFieldProps('backTestUrls')} />,
-    <MultiTextField {...generateMultiTextFieldProps('repositoryUrls')} />,
-    <MultiTextField {...generateMultiTextFieldProps('productionUrls')} />,
-    <MultiTextField {...generateMultiTextFieldProps('designUrls')} />,
-    <CardTextField {...generateTextFieldProps('projectManager')} />,
-    <CardTextField {...generateTextFieldProps('frontend')} />,
-    <CardTextField {...generateTextFieldProps('designers')} />,
-    <CardTextField {...generateTextFieldProps('clientName')} />,
-    <CardTextField {...generateTextFieldProps('clientMail')} />,
-    <CardTextField {...generateTextFieldProps('clientPhone')} />,
+  const projectInfoElems = [
+    <TextField {...generateTextFieldProps('title')} />,
+    <TextField {...generateTextFieldProps('projectManager')} />,
+    <TextField {...generateTextFieldProps('designers', { rows: 6 })} />
+  ];
 
-    <Button color="primary" variant="contained" onClick={saveHandler}>
-      Save
-    </Button>
+  const clientInfoElems = [
+    <TextField {...generateTextFieldProps('clientName')} />,
+    <TextField {...generateTextFieldProps('clientMail')} />,
+    <TextField {...generateTextFieldProps('clientPhone')} />
+  ];
+
+  const urlsElems = [
+    <UrlInputs {...generateUrlInputsFields('frontTestUrls')} />,
+    <UrlInputs {...generateUrlInputsFields('backTestUrls')} />,
+    <UrlInputs {...generateUrlInputsFields('repositoryUrls')} />,
+    <UrlInputs {...generateUrlInputsFields('productionUrls')} />,
+    <UrlInputs {...generateUrlInputsFields('designUrls')} />
   ];
 
   return (
@@ -104,8 +110,25 @@ const CreateProject = () => {
           <Button component={RouterLink} to="/" color="primary" variant="contained">
             Return to list
           </Button>
+          <Button color="primary" variant="contained" onClick={saveHandler} style={{ marginLeft: 24 }}>
+            Save
+          </Button>
         </PageHead>
-        <ElemsRenderer elems={elems} />
+        <Grid container spacing={3}>
+          <Grid item xs={12} md={6}>
+            <CardRenderer title="About Project">
+              <ElemsRenderer elems={projectInfoElems} />
+            </CardRenderer>
+            <CardRenderer title="Client Info" style={{ marginTop: 24 }}>
+              <ElemsRenderer elems={clientInfoElems} />
+            </CardRenderer>
+          </Grid>
+          <Grid item xs={12} md={6}>
+            <CardRenderer title="Urls">
+              <ElemsRenderer elems={urlsElems} />
+            </CardRenderer>
+          </Grid>
+        </Grid>
       </Page>
     </>
   );
