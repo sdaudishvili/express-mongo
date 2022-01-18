@@ -1,0 +1,72 @@
+{
+  "name": "react-dashboard",
+  "version": "0.1.0",
+  "private": true,
+  "dependencies": {
+    "@craco/craco": "^6.2.0",
+    "@material-ui/core": "^4.12.2",
+    "@material-ui/icons": "^4.11.2",
+    "@material-ui/lab": "^4.0.0-alpha.60",
+    "@material-ui/pickers": "^3.3.10",
+    "@material-ui/styles": "^4.11.4",
+    "@testing-library/jest-dom": "^5.11.4",
+    "@testing-library/react": "^11.1.0",
+    "@testing-library/user-event": "^12.1.10",
+    "@tinymce/tinymce-react": "^3.12.6",
+    "array-move": "^3.0.1",
+    "axios": "^0.21.1",
+    "chart.js": "^3.4.1",
+    "clsx": "^1.1.1",
+    "cross-env": "^7.0.3",
+    "dotenv-webpack": "^7.0.3",
+    "formik": "^2.2.9",
+    "history": "^5.0.0",
+    "js-cookie": "^2.2.1",
+    "lodash": "^4.17.21",
+    "moment": "^2.29.1",
+    "notistack": "^1.0.9",
+    "prop-types": "^15.7.2",
+    "react": "^17.0.2",
+    "react-cropper": "^2.1.8",
+    "react-dom": "^17.0.2",
+    "react-helmet": "^6.1.0",
+    "react-perfect-scrollbar": "^1.5.8",
+    "react-router-config": "^5.1.1",
+    "react-router-dom": "^5.2.0",
+    "react-scripts": "4.0.3",
+    "react-sortable-hoc": "^2.0.0",
+    "sass": "^1.36.0",
+    "tinymce": "^5.8.2",
+    "web-vitals": "^1.0.1"
+  },
+  "scripts": {
+    "dev": "cross-env SERVER=localhost craco start",
+    "build": "cross-env SERVER=leavingstone craco build",
+    "build-prod": "cross-env SERVER=production craco build",
+    "test": "craco test",
+    "eject": "react-scripts eject"
+  },
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
+  },
+  "devDependencies": {
+    "eslint": "^7.31.0",
+    "eslint-config-airbnb": "^18.2.1",
+    "eslint-config-prettier": "^8.3.0",
+    "eslint-loader": "^4.0.2",
+    "eslint-plugin-import": "^2.23.4",
+    "eslint-plugin-jsx-a11y": "^6.4.1",
+    "eslint-plugin-prettier": "^3.4.0",
+    "prettier": "^2.3.2",
+    "sass-loader": "^12.1.0"
+  }
+}
