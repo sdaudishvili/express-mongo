@@ -1,10 +1,8 @@
 /* eslint-disable react/no-danger */
 import React from 'react';
-import { Link as RouterLink } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import { makeStyles } from '@material-ui/styles';
 import {
-  Avatar,
   Button,
   Table,
   TableBody,
@@ -17,21 +15,8 @@ import {
   DialogContentText,
   DialogTitle
 } from '@material-ui/core';
-import CancelIcon from '@material-ui/icons/Cancel';
-import CheckCircleIcon from '@material-ui/icons/CheckCircle';
 
-import { propertyKeyToLabel } from '@/utils/base';
-import { staticUrl } from '@/api/host';
-
-const recursivelyGet = (curLevelObjRef, path, level) => {
-  if (!curLevelObjRef) return '';
-  if (level === path.length - 1) return curLevelObjRef[path[level]];
-  return recursivelyGet(curLevelObjRef[path[level]], path, level + 1);
-};
-
-const getValueByPath = (obj, path) => {
-  return recursivelyGet(obj, path.split('.'), 0);
-};
+import { Row } from './components';
 
 const useStyles = makeStyles((theme) => ({
   inner: {
@@ -54,8 +39,8 @@ const useStyles = makeStyles((theme) => ({
   }
 }));
 
-const ListRenderer = (props) => {
-  const { items, onDeleteClick, editRoute, displayKeys } = props;
+const List = (props) => {
+  const { items, onDeleteClick } = props;
 
   const classes = useStyles();
 
@@ -67,6 +52,7 @@ const ListRenderer = (props) => {
     setDeletableItemId(null);
   };
 
+  // eslint-disable-next-line no-unused-vars
   const handleDeleteButtonClick = (id) => {
     setDeletableItemId(id);
     setIsDeleteModalOpen(true);
@@ -77,71 +63,22 @@ const ListRenderer = (props) => {
     handleDeleteModalClose();
   };
 
-  const renderContent = (item, options) => {
-    const value = getValueByPath(item, options.prop);
-    if (item.isHtml) {
-      return <div dangerouslySetInnerHTML={{ __html: value }} />;
-    }
-    if (typeof value === 'boolean') {
-      return value ? <CheckCircleIcon color="secondary" /> : <CancelIcon color="action" />;
-    }
-    if (options.get) {
-      return options.get(value);
-    }
-    return value;
-  };
-
   return (
     <div className={classes.inner}>
       <Table>
         <TableHead>
           <TableRow>
-            {displayKeys &&
-              displayKeys.map((x) => (
-                <TableCell key={x.prop}>{x.title ? x.title : propertyKeyToLabel(x.prop)}</TableCell>
-              ))}
+            <TableCell width={100} />
+            <TableCell>Title</TableCell>
+            <TableCell>Front Urls</TableCell>
+            <TableCell>Admin Urls</TableCell>
+            <TableCell>Design Urls</TableCell>
             <TableCell align="right">Actions</TableCell>
           </TableRow>
         </TableHead>
         <TableBody>
           {items &&
-            items.map((item, i) => (
-              <TableRow hover key={item.id || JSON.stringify(i)}>
-                {displayKeys &&
-                  displayKeys.map((x) => (
-                    <TableCell className={x.imageKey && classes.imageCell} key={x.prop}>
-                      {x.imageKey && (
-                        <Avatar className={classes.avatar} src={staticUrl + getValueByPath(item, x.imageKey)}>
-                          {' '}
-                        </Avatar>
-                      )}
-                      {renderContent(item, x)}
-                    </TableCell>
-                  ))}
-                <TableCell align="right" className={classes.actions}>
-                  {editRoute && (
-                    <Button
-                      color="primary"
-                      component={RouterLink}
-                      to={`${editRoute}/${item.id}`}
-                      size="small"
-                      variant="outlined"
-                    >
-                      Edit
-                    </Button>
-                  )}
-                  <Button
-                    onClick={() => handleDeleteButtonClick(item.id ? item.id : item)}
-                    className={classes.deleteButton}
-                    type="submit"
-                    color="secondary"
-                    variant="contained"
-                  >
-                    Delete
-                  </Button>
-                </TableCell>
-              </TableRow>
-            ))}
+            items.map((item, i) => <Row item={item} key={JSON.stringify(i)} onDeleteClick={handleDeleteButtonClick} />)}
         </TableBody>
       </Table>
 
@@ -171,15 +108,12 @@ const ListRenderer = (props) => {
   );
 };
 
-ListRenderer.propTypes = {
+List.propTypes = {
   items: PropTypes.array.isRequired,
-  onDeleteClick: PropTypes.func,
-  editRoute: PropTypes.string,
-  displayKeys: PropTypes.array.isRequired
+  onDeleteClick: PropTypes.func
 };
-ListRenderer.defaultProps = {
-  onDeleteClick: () => {},
-  editRoute: ''
+List.defaultProps = {
+  onDeleteClick: () => {}
 };
 
-export default ListRenderer;
+export default List;

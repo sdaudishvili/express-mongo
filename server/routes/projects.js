@@ -4,8 +4,12 @@ const Project = require('@/models/Project');
 const router = express.Router();
 
 router.get('/projects', async (req, res) => {
-  const projects = await Project.find();
-  res.send(projects);
+  const { take = 10, skip = 0 } = req.query;
+  console.log(take, skip);
+  const query = Project.find();
+  const count = await query.clone().count();
+  const projects = await query.skip(skip).limit(take);
+  res.send({ data: projects, meta: { total: count, skip, take } });
 });
 
 router.get('/projects/:id', async (req, res) => {
@@ -19,7 +23,6 @@ router.get('/projects/:id', async (req, res) => {
 });
 
 router.post('/projects', async (req, res) => {
-  console.log(req.body);
   try {
     const project = new Project({
       title: req.body.title,
