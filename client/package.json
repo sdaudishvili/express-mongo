@@ -40,9 +40,9 @@
     "web-vitals": "^1.0.1"
   },
   "scripts": {
-    "dev": "cross-env SERVER=localhost craco start",
-    "build": "cross-env SERVER=leavingstone craco build",
-    "build-prod": "cross-env SERVER=production craco build",
+    "dev": "craco start",
+    "build": "craco build",
+    "build-prod": "craco build",
     "test": "craco test",
     "eject": "react-scripts eject"
   },
