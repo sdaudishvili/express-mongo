@@ -12,6 +12,8 @@ const initDB = require('./db');
 const app = express();
 initDB();
 
+console.log(process.env.CONNECTION_STRING);
+
 app.use(cors());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
