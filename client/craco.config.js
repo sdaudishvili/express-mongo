@@ -5,6 +5,13 @@ const appRoot = path.resolve(__dirname, './');
 
 const envPath = `${appRoot}/env/${process.env.SERVER}.env`;
 
+
+
+
+
+
+
+
 module.exports = {
   webpack: {
     alias: {
@@ -26,5 +33,8 @@ module.exports = {
       ]
     },
     plugins: [new Dotenv({ path: envPath })]
-  }
+  },
+  eslint: {
+    enable: process.env.NODE_ENV === 'development',
+  },
 };
