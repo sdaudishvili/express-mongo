@@ -8,10 +8,26 @@ const transformProject = (x) => ({
   id: x._id
 });
 
+const searchIn = [
+  'title',
+  'projectManager',
+  'backends',
+  'frontends',
+  'designers',
+  'clientName',
+  'clientMail',
+  'clientPhone',
+  'frontTestUrls',
+  'adminTestUrls',
+  'productionAdminUrls',
+  'designUrls'
+];
+
 router.get('/projects', async (req, res) => {
-  const { take = 10, skip = 0 } = req.query;
-  console.log(take, skip);
-  const query = Project.find();
+  const { take = 10, skip = 0, q = '' } = req.query;
+  const options = { $regex: q, $options: 'i' };
+
+  const query = Project.find({ $or: searchIn.map((x) => ({ [x]: options })) });
   const count = await query.clone().count();
   const projects = await query.skip(skip).limit(take);
   res.send({ data: projects.map(transformProject), meta: { total: count, skip, take } });

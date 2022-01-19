@@ -15,11 +15,17 @@ const ProjectSchema = mongoose.Schema({
   clientName: String,
   clientMail: String,
   clientPhone: String,
-  hasSupport: Boolean,
+  hasSupport: {
+    type: Boolean,
+    default: false
+  },
   supportStartDate: Date,
   supportEndDate: Date,
   year: String,
-  isOnOurServer: Boolean,
+  isOnOurServer: {
+    type: Boolean,
+    default: false
+  },
   createdAt: { type: Date, default: new Date() }
 });
 

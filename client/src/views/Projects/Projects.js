@@ -7,12 +7,16 @@ import { generateErrorMsg } from '@/utils/messages/generateErrorMsg';
 import { deleteOne, getMany } from '@/api/dataProvider';
 import { List } from './components';
 
+const PER_PAGE = 7;
+
 const Projects = () => {
-  const [queryOptions] = React.useState({
+  const [queryOptions, setQueryOptions] = React.useState({
     q: '',
     page: 0,
-    perPage: 5
+    perPage: PER_PAGE
   });
+
+  const pageChangeHandler = (page, perPage) => setQueryOptions((opt) => ({ ...opt, page, perPage }));
 
   const [projects, setProjects] = React.useState({ data: [], total: 0 });
 
@@ -40,7 +44,7 @@ const Projects = () => {
     };
 
     fetchData();
-  }, []);
+  }, [queryOptions]);
 
   const deleteHandler = async (id) => {
     try {
@@ -54,23 +58,20 @@ const Projects = () => {
   return (
     <>
       <Box display="flex" justifyContent="space-between">
-        <SearchBar onSearch={() => {}} />
+        <SearchBar onSearch={(q) => setQueryOptions({ ...queryOptions, q })} />
         <Button component={RouterLink} to="/create" variant="contained" color="primary" type="submit">
           Add project
         </Button>
       </Box>
-      <ListWrapper page={1} mt={3} count={4} title="All Items" onPageChange={() => {}} perPage={5}>
-        <List
-          items={projects.data}
-          onDeleteClick={deleteHandler}
-          displayKeys={[
-            { prop: 'title' },
-            { prop: 'index' },
-            { prop: 'slug' },
-            { prop: 'type' },
-            { prop: 'published' }
-          ]}
-        />
+      <ListWrapper
+        page={queryOptions.page}
+        mt={3}
+        count={projects.total}
+        title="All Items"
+        onPageChange={pageChangeHandler}
+        perPage={queryOptions.perPage}
+      >
+        <List items={projects.data} onDeleteClick={deleteHandler} />
       </ListWrapper>
     </>
   );

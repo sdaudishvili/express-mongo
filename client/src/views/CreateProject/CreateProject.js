@@ -3,13 +3,14 @@ import React from 'react';
 import { useSnackbar } from 'notistack';
 import { Button, Grid, TextField } from '@material-ui/core';
 import { makeStyles } from '@material-ui/styles';
-import { Link as RouterLink } from 'react-router-dom';
-import { create } from '@/api/dataProvider';
+import { Link as RouterLink, useHistory, useParams } from 'react-router-dom';
+import { create, getOne, updateOne } from '@/api/dataProvider';
 import { generateErrorMsg } from '@/utils/messages/generateErrorMsg';
 import { CardRenderer, ElemsRenderer, Page, PageHead } from '@/components';
 import { messages } from '@/utils/messages';
 import { propertyKeyToLabel } from '@/utils/base';
 import { UrlInputs } from './components';
+import deepClone from '@/utils/deepClone';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -45,12 +46,35 @@ const CreateProject = () => {
   const [values, setValues] = React.useState({ ...initialValues });
   const classes = useStyles();
 
+  const { id } = useParams();
+  const history = useHistory();
+
   const { enqueueSnackbar } = useSnackbar();
+
+  React.useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const res = await getOne('projects', id);
+        setValues(deepClone(res));
+      } catch (err) {
+        history.push('/404');
+      }
+    };
+
+    if (id) {
+      fetchData();
+    }
+  }, [id]);
 
   const saveHandler = async () => {
     try {
-      await create('/projects', values);
-      enqueueSnackbar(messages.UpdateSuccess, { variant: 'success' });
+      if (id) {
+        await updateOne('projects', values);
+        enqueueSnackbar(messages.UpdateSuccess, { variant: 'success' });
+      } else {
+        await create('projects', values);
+        enqueueSnackbar(messages.CreateSuccess, { variant: 'success' });
+      }
     } catch (err) {
       if (err.errors) {
         err.errors.forEach((err) => enqueueSnackbar(generateErrorMsg(err), { variant: 'error' }));
@@ -107,10 +131,12 @@ const CreateProject = () => {
     <UrlInputs {...generateUrlInputsFields('productionAdminUrls')} />
   ];
 
+  const title = id ? 'Edit' : 'Create';
+
   return (
     <>
-      <Page className={classes.root} title="Edit">
-        <PageHead h2="resourceName" h1="Edit">
+      <Page className={classes.root} title={title}>
+        <PageHead h2="Projects" h1={title}>
           <Button component={RouterLink} to="/" color="primary" variant="contained">
             Return to list
           </Button>

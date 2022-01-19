@@ -75,7 +75,7 @@ const Row = ({ item, onDeleteClick }) => {
         </TableCell>
 
         <TableCell align="right">
-          <Button color="primary" component={RouterLink} to={`${'/a'}/${item.id}`} size="small" variant="outlined">
+          <Button color="primary" component={RouterLink} to={`${'/update'}/${item.id}`} size="small" variant="outlined">
             Edit
           </Button>
           <Button
