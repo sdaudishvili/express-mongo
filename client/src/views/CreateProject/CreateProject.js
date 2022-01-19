@@ -22,12 +22,13 @@ const useStyles = makeStyles((theme) => ({
 const initialValues = {
   title: '',
   frontTestUrls: [],
-  backTestUrls: [],
+  adminTestUrls: [],
   repositoryUrls: [],
-  productionUrls: [],
+  productionFrontUrls: [],
+  productionAdminUrls: [],
   projectManager: '',
-  backend: '',
-  frontend: '',
+  backends: '',
+  frontends: '',
   designUrls: [],
   designers: '',
   clientName: '',
@@ -36,7 +37,7 @@ const initialValues = {
   hasSupport: true,
   supportStartDate: new Date(),
   supportEndDate: new Date(),
-  year: '',
+  year: '2020',
   isOnOurServer: true
 };
 
@@ -86,6 +87,8 @@ const CreateProject = () => {
   const projectInfoElems = [
     <TextField {...generateTextFieldProps('title')} />,
     <TextField {...generateTextFieldProps('projectManager')} />,
+    <TextField {...generateTextFieldProps('frontends', { rows: 6 })} />,
+    <TextField {...generateTextFieldProps('backends', { rows: 6 })} />,
     <TextField {...generateTextFieldProps('designers', { rows: 6 })} />
   ];
 
@@ -97,10 +100,11 @@ const CreateProject = () => {
 
   const urlsElems = [
     <UrlInputs {...generateUrlInputsFields('frontTestUrls')} />,
-    <UrlInputs {...generateUrlInputsFields('backTestUrls')} />,
+    <UrlInputs {...generateUrlInputsFields('adminTestUrls')} />,
+    <UrlInputs {...generateUrlInputsFields('designUrls')} />,
     <UrlInputs {...generateUrlInputsFields('repositoryUrls')} />,
-    <UrlInputs {...generateUrlInputsFields('productionUrls')} />,
-    <UrlInputs {...generateUrlInputsFields('designUrls')} />
+    <UrlInputs {...generateUrlInputsFields('productionFrontUrls')} />,
+    <UrlInputs {...generateUrlInputsFields('productionAdminUrls')} />
   ];
 
   return (

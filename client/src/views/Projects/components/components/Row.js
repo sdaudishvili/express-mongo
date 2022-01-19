@@ -31,6 +31,7 @@ const useRowStyles = makeStyles({
 const useArrayRendererStyles = makeStyles((theme) => ({
   anchor: {
     color: 'black',
+    display: 'block',
     '&:hover': {
       color: theme.palette.primary.main,
       textDecoration: 'underline'
@@ -40,7 +41,8 @@ const useArrayRendererStyles = makeStyles((theme) => ({
 
 const ArrayRenderer = ({ arr }) => {
   const classes = useArrayRendererStyles();
-  return arr.map((x) => (
+  const a = arr || [];
+  return a.map((x) => (
     <a key={x} href={x} className={classes.anchor} style={{ hover: { textDecoration: 'underline' } }}>
       {x}
     </a>
@@ -106,8 +108,8 @@ const Row = ({ item, onDeleteClick }) => {
                 <TableBody>
                   <TableRow>
                     <TableCell>{item.projectManager}</TableCell>
-                    <TableCell>{item.backend}</TableCell>
-                    <TableCell>{item.frontend}</TableCell>
+                    <TableCell>{item.backends}</TableCell>
+                    <TableCell>{item.frontends}</TableCell>
                   </TableRow>
                 </TableBody>
               </Table>

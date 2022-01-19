@@ -3,19 +3,24 @@ const Project = require('@/models/Project');
 
 const router = express.Router();
 
+const transformProject = (x) => ({
+  ...x._doc,
+  id: x._id
+});
+
 router.get('/projects', async (req, res) => {
   const { take = 10, skip = 0 } = req.query;
   console.log(take, skip);
   const query = Project.find();
   const count = await query.clone().count();
   const projects = await query.skip(skip).limit(take);
-  res.send({ data: projects, meta: { total: count, skip, take } });
+  res.send({ data: projects.map(transformProject), meta: { total: count, skip, take } });
 });
 
 router.get('/projects/:id', async (req, res) => {
   try {
     const project = await Project.findOne({ _id: req.params.id });
-    res.send(project);
+    res.send(transformProject(project));
   } catch {
     res.status(404);
     res.send({ error: "Project doesn't exist!" });
@@ -27,12 +32,13 @@ router.post('/projects', async (req, res) => {
     const project = new Project({
       title: req.body.title,
       frontTestUrls: req.body.frontTestUrls,
-      backTestUrls: req.body.backTestUrls,
+      adminTestUrls: req.body.adminTestUrls,
       repositoryUrls: req.body.repositoryUrls,
-      productionUrls: req.body.productionUrls,
+      productionFrontUrls: req.body.productionFrontUrls,
+      productionAdminUrls: req.body.productionAdminUrls,
       projectManager: req.body.projectManager,
-      backend: req.body.backend,
-      frontend: req.body.frontend,
+      backends: req.body.backends,
+      frontends: req.body.frontends,
       designUrls: req.body.designUrls,
       designers: req.body.designers,
       clientName: req.body.clientName,
@@ -45,7 +51,7 @@ router.post('/projects', async (req, res) => {
       isOnOurServer: req.body.isOnOurServer
     });
     await project.save();
-    res.send(project);
+    res.send(transformProject(project));
   } catch (error) {
     console.log(error);
     res.status(400).send();
@@ -57,12 +63,13 @@ router.put('/projects/:id', async (req, res) => {
     const project = await Project.findOne({ _id: req.params.id });
     project.title = req.body.title;
     project.frontTestUrls = req.body.frontTestUrls;
-    project.backTestUrls = req.body.backTestUrls;
+    project.adminTestUrls = req.body.adminTestUrls;
     project.repositoryUrls = req.body.repositoryUrls;
-    project.productionUrls = req.body.productionUrls;
+    project.productionFrontUrls = req.body.productionFrontUrls;
+    project.productionAdminUrls = req.body.productionAdminUrls;
     project.projectManager = req.body.projectManager;
-    project.backend = req.body.backend;
-    project.frontend = req.body.frontend;
+    project.backends = req.body.backends;
+    project.frontends = req.body.frontends;
     project.designUrls = req.body.designUrls;
     project.designers = req.body.designers;
     project.clientName = req.body.clientName;
@@ -74,7 +81,7 @@ router.put('/projects/:id', async (req, res) => {
     project.year = req.body.year;
     project.isOnOurServer = req.body.isOnOurServer;
     await project.save();
-    res.send(project);
+    res.send(transformProject(project));
   } catch {
     res.status(404);
     res.send({ error: "Project doesn't exist!" });
