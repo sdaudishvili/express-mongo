@@ -1,10 +1,10 @@
 import React from 'react';
-import { ListWrapper, SearchBar } from '@/components';
-import { generateErrorMsg } from '@/utils/messages/generateErrorMsg';
-import { getMany } from '@/api/dataProvider';
 import { useSnackbar } from 'notistack';
 import { Box, Button } from '@material-ui/core';
 import { Link as RouterLink } from 'react-router-dom';
+import { ListWrapper, SearchBar } from '@/components';
+import { generateErrorMsg } from '@/utils/messages/generateErrorMsg';
+import { getMany } from '@/api/dataProvider';
 import { List } from './components';
 
 const Projects = () => {
@@ -27,7 +27,7 @@ const Projects = () => {
         skip: page * perPage
       };
       try {
-        const res = await getMany('/projects', { query });
+        const res = await getMany('projects', { query });
         const { data = [], meta: { total = 0 } = {} } = res;
         setProjects({ data, total });
       } catch (err) {
@@ -38,6 +38,7 @@ const Projects = () => {
         }
       }
     };
+
     fetchData();
   }, []);
 

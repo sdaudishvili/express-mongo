@@ -3,16 +3,16 @@ import { makeStyles } from '@material-ui/styles';
 import { Card, CardContent, CardMedia, Typography, Divider } from '@material-ui/core';
 import LockIcon from '@material-ui/icons/Lock';
 
+import Cookies from 'js-cookie';
+import { useSnackbar } from 'notistack';
 import { Page } from '@/components';
 import gradients from '@/utils/gradients';
 import { axiosRemote as axios } from '@/utils/axios';
 import setAuthTokens from '@/utils/setAuthTokens';
 import useRouter from '@/utils/useRouter';
-import Cookies from 'js-cookie';
 import { useUser } from '@/context/userContext';
 import { apiBaseUrl } from '@/api/host';
 import { messages } from '@/utils/messages';
-import { useSnackbar } from 'notistack';
 import { LoginForm } from './components';
 
 const useStyles = makeStyles((theme) => ({

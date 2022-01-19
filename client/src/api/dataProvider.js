@@ -1,8 +1,8 @@
 import { axiosRemote as axios } from '@/utils/axios';
 import buildQuery from '@/utils/buildQuery';
 import { handleError, handleSuccess } from './handler';
-// import { apiBaseUrl } from './host';
-const apiBaseUrl = 'http://localhost:3001/api';
+
+const apiBaseUrl = '/api';
 
 export const getMany = async (resource, params = {}) => {
   const { query = {} } = params;

@@ -6,7 +6,8 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "cd server && npm install && node index.js",
-    "build": "cd client && npm install && npm run build"
+    "build": "cd client && npm install && npm run build",
+    "dev": "concurrently \"cd client && npm run dev\" \"cd server && nodemon index.js\""
   },
   "heroku-run-build-script": true,
   "repository": {
@@ -18,5 +19,8 @@
   "bugs": {
     "url": "https://github.com/sdaudishvili/express-mongo/issues"
   },
-  "homepage": "https://github.com/sdaudishvili/express-mongo#readme"
+  "homepage": "https://github.com/sdaudishvili/express-mongo#readme",
+  "dependencies": {
+    "concurrently": "^7.0.0"
+  }
 }

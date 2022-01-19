@@ -2,9 +2,9 @@ import React, { useEffect } from 'react';
 import { Helmet } from 'react-helmet';
 import PropTypes from 'prop-types';
 
-import useRouter from '@/utils/useRouter';
 import { makeStyles } from '@material-ui/styles';
 import clsx from 'clsx';
+import useRouter from '@/utils/useRouter';
 
 const { NODE_ENV } = process.env;
 const GA_MEASUREMENT_ID = process.env.REACT_APP_GA_MEASUREMENT_ID;

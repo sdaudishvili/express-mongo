@@ -8,8 +8,8 @@ export default {
   white,
   primary: {
     contrastText: white,
-    dark: '#000000',
-    main: '#000000',
+    dark: '#2EA09A',
+    main: '#2EA09A',
     light: '#3f404e'
   },
   secondary: {

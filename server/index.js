@@ -29,6 +29,7 @@ app.get('*', function (req, res) {
   res.status(404).send();
 });
 
-app.listen(process.env.PORT || 3001, () => {
-  console.log('Server has started!');
+const port = process.env.PORT || 3001;
+app.listen(port, () => {
+  console.log(`Server has started on port ${port}`);
 });
